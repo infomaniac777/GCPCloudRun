@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alexk8
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: alexk8
+  template:
+    metadata:
+      labels:
+        app: alexk8
+    spec:
+      containers:
+        - name: alexk8
+          image: us-central1-docker.pkg.dev/gpu0-477909/gcpcloudrun/gcpcloudrun:latest
+          ports:
+            - containerPort: 8080

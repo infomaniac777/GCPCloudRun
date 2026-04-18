@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: alexk8
+spec:
+  selector:
+    app: alexk8
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 8080
