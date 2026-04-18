@@ -17,3 +17,15 @@ spec:
           image: us-central1-docker.pkg.dev/gpu0-477909/gcpcloudrun/gcpcloudrun:latest
           ports:
             - containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10

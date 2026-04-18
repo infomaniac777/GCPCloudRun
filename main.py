@@ -24,6 +24,11 @@ def index(request: Request):
     return templates.TemplateResponse(request=request, name="index.html", context={})
 
 
+@app.get("/healthz")
+def healthz():
+    return {"status": "ok"}
+
+
 @app.post("/api/add", response_model=AddResponse)
 def api_add(body: AddRequest) -> AddResponse:
     return AddResponse(
