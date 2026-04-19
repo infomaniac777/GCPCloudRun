@@ -4,6 +4,10 @@ metadata:
   name: alexk8
 spec:
   replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
   selector:
     matchLabels:
       app: alexk8
@@ -17,13 +21,12 @@ spec:
           image: us-central1-docker.pkg.dev/gpu0-477909/gcpcloudrun/gcpcloudrun:latest
           ports:
             - containerPort: 8080
-          resources:
-            requests:
-              cpu: 100m
-              memory: 128Mi
-            limits:
-              cpu: 250m
-              memory: 256Mi
+          envFrom:
+            - configMapRef:
+                name: alexk8-config
+            - secretRef:
+                name: alexk8-secret
+          resources: {}
           livenessProbe:
             httpGet:
               path: /healthz

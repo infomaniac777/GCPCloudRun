@@ -32,6 +32,16 @@ jobs:
         with:
           install_components: gke-gcloud-auth-plugin
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run tests
+        run: |
+          pip install -r requirements.txt
+          pytest tests/
+
       - name: Configure Docker for Artifact Registry
         run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
 

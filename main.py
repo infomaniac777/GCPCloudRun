@@ -1,3 +1,4 @@
+import os
 from datetime import datetime, timezone
 
 from fastapi import FastAPI, Request
@@ -22,6 +23,16 @@ class AddResponse(BaseModel):
 @app.get("/", response_class=HTMLResponse)
 def index(request: Request):
     return templates.TemplateResponse(request=request, name="index.html", context={})
+
+
+@app.get("/config")
+def config():
+    return {
+        "DB_HOST": os.getenv("DB_HOST"),
+        "DB_PORT": os.getenv("DB_PORT"),
+        "DB_NAME": os.getenv("DB_NAME"),
+        "DB_PASSWORD": os.getenv("DB_PASSWORD"),
+    }
 
 
 @app.get("/healthz")
