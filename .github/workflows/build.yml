@@ -66,4 +66,4 @@ jobs:
           IMAGE_TAG: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.AR_REPO }}/${{ env.SERVICE }}:${{ github.sha }}
         run: |
           envsubst < k8s/deployment.yaml | kubectl apply -f -
-          kubectl apply -f k8s/service.yaml k8s/configmap.yaml k8s/secret.yaml
+          kubectl apply -f k8s/service.yaml -f k8s/configmap.yaml -f k8s/secret.yaml
