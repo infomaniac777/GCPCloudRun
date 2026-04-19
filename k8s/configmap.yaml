@@ -1,8 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: alexk8-config
-data:
-  DB_HOST: postgres.example.com
-  DB_PORT: "5432"
-  DB_NAME: myappdb
