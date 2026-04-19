@@ -1,0 +1,6 @@
+apiVersion: v2
+name: alexk8
+description: A simple FastAPI app deployed on GKE
+type: application
+version: 0.1.0
+appVersion: "1.0.0"

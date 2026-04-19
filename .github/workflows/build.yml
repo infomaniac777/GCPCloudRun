@@ -52,8 +52,8 @@ jobs:
           push: true
           tags: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.AR_REPO }}/${{ env.SERVICE }}:${{ github.sha }}
 
-      - name: Install kubectl
-        uses: azure/setup-kubectl@v3
+      - name: Install Helm
+        uses: azure/setup-helm@v4
 
       - name: Get GKE credentials
         run: |
@@ -62,8 +62,6 @@ jobs:
             --project=${{ env.PROJECT_ID }}
 
       - name: Deploy to GKE
-        env:
-          IMAGE_TAG: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.AR_REPO }}/${{ env.SERVICE }}:${{ github.sha }}
         run: |
-          envsubst < k8s/deployment.yaml | kubectl apply -f -
-          kubectl apply -f k8s/service.yaml -f k8s/configmap.yaml -f k8s/secret.yaml
+          helm upgrade --install ${{ env.SERVICE }} ./chart \
+            --set image.tag=${{ github.sha }}

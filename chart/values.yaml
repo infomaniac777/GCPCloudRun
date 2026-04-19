@@ -1,0 +1,30 @@
+replicaCount: 2
+
+image:
+  repository: us-central1-docker.pkg.dev/gpu0-477909/gcpcloudrun/gcpcloudrun
+  tag: latest
+  pullPolicy: Always
+
+service:
+  type: LoadBalancer
+  port: 80
+  targetPort: 8080
+
+probes:
+  liveness:
+    path: /healthz
+    initialDelaySeconds: 10
+    periodSeconds: 15
+  readiness:
+    path: /healthz
+    initialDelaySeconds: 5
+    periodSeconds: 10
+
+rollingUpdate:
+  maxUnavailable: 1
+
+db:
+  host: postgres.example.com
+  port: "5432"
+  name: myappdb
+  password: placeholder-password-123
