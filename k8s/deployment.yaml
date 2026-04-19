@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: alexk8
-          image: us-central1-docker.pkg.dev/gpu0-477909/gcpcloudrun/gcpcloudrun:latest
+          image: ${IMAGE_TAG}
           ports:
             - containerPort: 8080
           envFrom:
