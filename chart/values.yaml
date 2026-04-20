@@ -27,4 +27,6 @@ db:
   host: postgres.example.com
   port: "5432"
   name: myappdb
-  password: placeholder-password-123
+
+gcp:
+  projectID: gpu0-477909
