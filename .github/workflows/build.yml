@@ -10,6 +10,7 @@ env:
   ZONE: us-central1-a
   AR_REPO: gcpcloudrun
   SERVICE: gcpcloudrun
+  GRPC_SERVICE: calc-grpc
   CLUSTER: gke-experiments
 
 jobs:
@@ -34,7 +35,7 @@ jobs:
           pytest tests/
 
   push:
-    name: Push Image
+    name: Push Python Image
     runs-on: ubuntu-latest
     needs: build
     permissions:
@@ -62,10 +63,40 @@ jobs:
           push: true
           tags: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.AR_REPO }}/${{ env.SERVICE }}:${{ github.sha }}
 
+  push-grpc:
+    name: Push gRPC Image
+    runs-on: ubuntu-latest
+    needs: build
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Authenticate to GCP
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure Docker for Artifact Registry
+        run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
+
+      - name: Build and push gRPC image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: grpc-server/Dockerfile
+          push: true
+          tags: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.AR_REPO }}/${{ env.GRPC_SERVICE }}:${{ github.sha }}
+
   deploy:
     name: Deploy to GKE
     runs-on: ubuntu-latest
-    needs: push
+    needs: [push, push-grpc]
     permissions:
       contents: read
 
@@ -92,7 +123,12 @@ jobs:
             --zone=${{ env.ZONE }} \
             --project=${{ env.PROJECT_ID }}
 
-      - name: Deploy to GKE
+      - name: Deploy Python app
         run: |
           helm upgrade --install ${{ env.SERVICE }} ./chart \
+            --set image.tag=${{ github.sha }}
+
+      - name: Deploy gRPC service
+        run: |
+          helm upgrade --install ${{ env.GRPC_SERVICE }} ./chart-grpc \
             --set image.tag=${{ github.sha }}

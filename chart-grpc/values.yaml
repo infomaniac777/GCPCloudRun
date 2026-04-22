@@ -1,0 +1,9 @@
+replicaCount: 1
+
+image:
+  repository: us-central1-docker.pkg.dev/gpu0-477909/gcpcloudrun/calc-grpc
+  tag: latest
+  pullPolicy: Always
+
+service:
+  port: 50051

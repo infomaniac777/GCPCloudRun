@@ -28,5 +28,7 @@ db:
   port: "5432"
   name: myappdb
 
+grpcHost: "calc-grpc:50051"
+
 gcp:
   projectID: gpu0-477909
