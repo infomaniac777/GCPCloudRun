@@ -16,14 +16,14 @@ ingress:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
   hosts:
-    - host: 34.132.208.88.nip.io
+    - host: 104.198.175.33.nip.io
       paths:
         - path: /
           pathType: ImplementationSpecific
   tls:
     - secretName: gcpcloudrun-tls
       hosts:
-        - 34.132.208.88.nip.io
+        - 104.198.175.33.nip.io
 
 probes:
   liveness:
