@@ -1,6 +1,6 @@
 # GKE Experiments
 
-![CI/CD](https://github.com/infomaniac777/GCPCloudRun/actions/workflows/build.yml/badge.svg)
+![CI/CD](https://github.com/infomaniac777/GKECloudNative/actions/workflows/build.yml/badge.svg)
 
 A FastAPI app running on Google Kubernetes Engine, deployed via a fully automated CI/CD pipeline.
 
