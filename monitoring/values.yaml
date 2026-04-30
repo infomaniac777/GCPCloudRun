@@ -1,0 +1,81 @@
+grafana:
+  enabled: true
+  adminPassword: "changeme"  # change before deploying
+
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    hosts:
+      - grafana.104.198.175.33.nip.io
+    tls:
+      - secretName: grafana-tls
+        hosts:
+          - grafana.104.198.175.33.nip.io
+
+  persistence:
+    enabled: true
+    size: 2Gi
+
+  # Pre-load the most useful Kubernetes dashboards
+  dashboardProviders:
+    dashboardproviders.yaml:
+      apiVersion: 1
+      providers:
+        - name: default
+          orgId: 1
+          folder: Kubernetes
+          type: file
+          disableDeletion: false
+          editable: true
+          options:
+            path: /var/lib/grafana/dashboards/default
+
+  dashboards:
+    default:
+      kubernetes-cluster:
+        gnetId: 315
+        revision: 3
+        datasource: Prometheus
+      node-exporter-full:
+        gnetId: 1860
+        revision: 37
+        datasource: Prometheus
+      pod-resources:
+        gnetId: 6417
+        revision: 1
+        datasource: Prometheus
+      kube-state-metrics:
+        gnetId: 13332
+        revision: 12
+        datasource: Prometheus
+
+prometheus:
+  prometheusSpec:
+    retention: 7d
+    resources:
+      requests:
+        cpu: 200m
+        memory: 512Mi
+      limits:
+        memory: 1Gi
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 10Gi
+
+alertmanager:
+  enabled: false  # enable later if you want alerts
+
+kubeControllerManager:
+  enabled: false  # GKE manages these components, scraping will fail
+kubeScheduler:
+  enabled: false
+kubeEtcd:
+  enabled: false
+kubeProxy:
+  enabled: false
