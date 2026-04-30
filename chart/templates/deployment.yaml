@@ -15,8 +15,6 @@ spec:
     metadata:
       labels:
         app: {{ .Release.Name }}
-      annotations:
-        secret.reloader.stakater.com/reload: {{ .Release.Name }}-secret
     spec:
       containers:
         - name: {{ .Release.Name }}
@@ -27,8 +25,6 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ .Release.Name }}-config
-            - secretRef:
-                name: {{ .Release.Name }}-secret
           livenessProbe:
             httpGet:
               path: {{ .Values.probes.liveness.path }}
