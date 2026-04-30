@@ -1,6 +1,6 @@
 grafana:
   enabled: true
-  adminPassword: "changeme"  # change before deploying
+  adminPassword: "changeme"  # override at install time via --set grafana.adminPassword
 
   ingress:
     enabled: true
